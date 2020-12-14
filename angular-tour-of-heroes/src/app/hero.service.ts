@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
-import { Observable, of } from 'rxjs';
-import { MessageService} from './message.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Hero} from './hero';
+import {HEROES} from './mock-heroes';
+import {Observable, of} from 'rxjs';
+import {MessageService} from './message.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {catchError, map, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +12,18 @@ import { catchError, map, tap } from 'rxjs/operators';
 export class HeroService {
   private heroesUrl = 'api/heroes';
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json'})
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
+
   getHeroes(): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
         tap(heroes => this.log('fetched heroes')),
         catchError(this.handleError<Hero[]>('getHeroes', [])));
   }
-  constructor(private http: HttpClient, private messageService: MessageService) { }
+
+  constructor(private http: HttpClient, private messageService: MessageService) {
+  }
 
   getHero(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/${id}`;
@@ -29,11 +32,12 @@ export class HeroService {
       catchError(this.handleError<Hero>(`getHero id=${id}`))
     );
   }
+
   private log(message: string): void {
     this.messageService.add(`HeroService: ${message}`);
   }
 
-  private handleError<T>(operation= 'operation', result?: T): (error: any) => Observable<T> {
+  private handleError<T>(operation = 'operation', result?: T): (error: any) => Observable<T> {
     return (error: any): Observable<T> => {
       console.error(error);
       this.log(`${operation} failed: ${error.message}`);
@@ -71,7 +75,7 @@ export class HeroService {
     }
     return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
       tap(_ => this.log(`found heroes matching "${term}"`)),
-      catchError(this.handleError<Hero[]>('searchHeroes',[]))
+      catchError(this.handleError<Hero[]>('searchHeroes', []))
     );
   }
 }
